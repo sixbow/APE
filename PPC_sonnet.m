@@ -9,9 +9,10 @@ classdef PPC_sonnet
         N
         d
         data_dir
-        omega
-        Zin
-        S11
+        freq
+        Z
+        S
+        ABCD
         A_narrow_section= (4E-6)*(6E-6);
     end
     

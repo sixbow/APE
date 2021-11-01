@@ -1,4 +1,4 @@
-classdef PPC_sonnet
+classdef PPC_sonnet_oneport
     %PPC_sonnet is a class that contains infomation about sonnet simulation
     %of the PPC
     %Constructor arg: PPC_theory(W (Width PPC(m)),N (Lenght PPC(m)),d (thickness dielectric(m)),)
@@ -8,19 +8,27 @@ classdef PPC_sonnet
         W
         N
         d
-        data_dir
+        data_str
+        data
         omega
-        Z
-        S
-        ABCD
+        Zin
+        S11
         A_narrow_section= (4E-6)*(6E-6);
     end
     
         methods
-        function obj = PPC_sonnet(W,N,d,data_dir)
-            %UNTITLED4 Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+        function obj = PPC_sonnet(W,N,d,data_str)
+            %Constructor for the PPC_sonnet_oneport class 
+            % PPC_sonnet(Width(m),N Length(m),d thickness(m),data_dir)   
+            obj.W        = W;
+            obj.N        = N
+            obj.d        = d;
+            obj.data_str = data_str;
+            obj.data     = readtable(obj.data_str , "NumHeaderLines",7);
+            obj.omega    = obj.data(:,1];
+            obj.Zin      = obj.data[:,2] + 1j*obj.data[:,3];
+            %obj.genSparameter();
+            
         end
         
         function outputArg = method1(obj,inputArg)

@@ -23,14 +23,14 @@ classdef PPC_theory
             obj.N = N;
             obj.d = d;
             obj.e_r = e_r;
-            obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.N*obj.W+obj.A_narrow_section))/(obj.d);
+            obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.N*obj.W))/(obj.d);
         end 
         %End Constructors
         
         %General useful methods:
-        function outputArg = Zin(obj,omega)
+        function outputArg = Zin(obj,freq)
         %Zin calculates input impedance according to Zin=-j/(omega*C)
-        outputArg = -1i.*(1./(omega.*obj.C_PPC_theory));
+        outputArg = -1i.*(1./(2*pi*freq.*obj.C_PPC_theory));
         end
         function outputArg = get_A(obj)
             %get_C_PPC_theory() :  getter total surface area + small overlap PPC
