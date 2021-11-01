@@ -25,8 +25,7 @@ for i=1:9
     plot(freq,imag(PPCt(i).Zin(freq)),'color','blue');
     plot(freq,imag(PPCs(i).get_Zin()),'color','red');
 end
-
-plot(freq,-(2.*pi.*freq.*1.099E-9));
+plot(freq,(2))
 legend('Theory','Sonnet')
 ax = gca;
 hold off
