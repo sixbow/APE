@@ -1,9 +1,0 @@
-clear all
-close all 
-
-PPC = PPC_theory(50E-6,50E-6,250E-9,10);
-%Disp graph for the input impedance
-omega = linspace(3E9,7E9,100);
-plot(omega,imag(PPC.Zin(omega)))
-
-
