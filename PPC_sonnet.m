@@ -16,7 +16,7 @@ classdef PPC_sonnet
     end
     
         methods
-        function obj = untitled4(inputArg1,inputArg2)
+        function obj = PPC_sonnet(W,N,d,data_dir)
             %UNTITLED4 Construct an instance of this class
             %   Detailed explanation goes here
             obj.Property1 = inputArg1 + inputArg2;
