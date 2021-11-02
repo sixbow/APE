@@ -15,18 +15,23 @@ for i=1:9
     disp(total_filename);
     PPCs(i) = PPC_sonnet_oneport(50E-6,51E-6,250E-9,total_filename);
 end
+CPWt = CPW_theory_first_order(0.001,1.099E-9);
+
+
+
 
 %Disp graph for the input impedance
 freq = PPCs.get_freq();
 f = figure;
 hold on
 ax = gca;
-for i=1:9
-    plot(freq,imag(PPCt(i).Zin(freq)),'color','blue');
-    plot(freq,imag(PPCs(i).get_Zin()),'color','red');
+for i=3:7
+    plot(freq,-imag(PPCt(i).Zin(freq)),'color','blue');
+    plot(freq,-imag(PPCs(i).get_Zin()),'color','red');
 end
-plot(freq,(2))
-legend('Theory','Sonnet')
+
+plot(freq,CPWt.Zin(freq),'color','cyan');
+legend('PPC Theory','Sonnet','CPW Theory')
 ax = gca;
 hold off
 
