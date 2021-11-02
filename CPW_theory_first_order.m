@@ -18,7 +18,7 @@ classdef CPW_theory_first_order
         function outputArg = Zin(obj,freq)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
-            outputArg = 2.*pi.*freq.*obj.L;
+            outputArg = 1i*2.*pi.*freq.*obj.L;
         end
     end
 end
