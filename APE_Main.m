@@ -5,6 +5,7 @@ addpath('.\Sonnet_data')
 filename_begin = 'PPCV0_0_2W';
 filename_end = '.csv';
 filename_CPW_SC = 'AlHybridV0_0_1_SC.csv';
+filename_CPW_PEC = 'AlHybridV0_0_2_PEC.csv';
 %Constructor arg: PPC_theory(W (Width PPC(m)),N (Lenght PPC(m)),d (thickness dielectric(m)),e_r(number))
 for i=1:9
     PPCt(i) = PPC_theory(10E-6*i,51E-6,250E-9,10);
@@ -15,8 +16,8 @@ for i=1:9
     PPCs(i) = PPC_sonnet_oneport(i*10E-6,51E-6,250E-9,total_filename,8);
 end
 CPWt = CPW_theory_first_order(0.001,1.099E-9);
-CPWs = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
-
+CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
+CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
 
 
@@ -25,18 +26,18 @@ freq = PPCs.get_freq();
 f = figure;
 hold on
 ax = gca;
-for i=5:7
+for i=3:7
     plot(freq,-imag(PPCt(i).Zin(freq)));
     %[x_intersect_t(i),y_intersect_t(i)] = find_intersect_2lines(PPCt(i).get_freq(),CPWt.get_freq(),imag(PPCs(i).Zin()),-imag(CPWs.Zin()),'linearinterp',1);
     plot(freq,-imag(PPCs(i).get_Zin()));
-    [x_intersect_s(i),y_intersect_s(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWs.get_freq(),-imag(PPCs(i).Zin()),imag(CPWs.Zin()),'linearinterp',0);
+    [x_intersect_s(i),y_intersect_s(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsSC.Zin()),'linearinterp',0);
     
     disp(PPCs(i).get_W());
 end
 
-plot(x_intersect_s(5:7),y_intersect_s(5:7),'o')
+plot(x_intersect_s(3:7),y_intersect_s(3:7),'o')
 % Finding crossing points
-%[x_intersect,y_intersect] = find_intersect_2lines(PPCs(5).get_freq(),CPWs.get_freq(),imag(PPCs(5).Zin()),-imag(CPWs.Zin()),'linearinterp',1);
+%[x_intersect,y_intersect] = find_intersect_2lines(PPCs(5).get_freq(),CPWsSC.get_freq(),imag(PPCs(5).Zin()),-imag(CPWsSC.Zin()),'linearinterp',1);
 
 
 
@@ -44,7 +45,8 @@ plot(x_intersect_s(5:7),y_intersect_s(5:7),'o')
 
 
 plot(freq,imag(CPWt.Zin(freq)));
-plot(CPWs.get_freq(),imag(CPWs.get_Zin))
+plot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin))
+plot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin))
 legend('PPC Theory','Sonnet','CPW Theory')
 ax = gca;
 xlabel('[Hz]')
