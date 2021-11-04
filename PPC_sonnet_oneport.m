@@ -20,6 +20,7 @@ classdef PPC_sonnet_oneport
         function obj = PPC_sonnet_oneport(W,N,d,data_str,hlines)
             %Constructor for the PPC_sonnet_oneport class 
             % PPC_sonnet_oneport(Width(m),N Length(m),d thickness(m),data_dir,hlines)   
+            if nargin > 0 % Way to implement function overloading in MATLAB. Want to have empty constructor to allocate objects.
             obj.W        = W;
             obj.N        = N;
             obj.d        = d;
@@ -27,8 +28,8 @@ classdef PPC_sonnet_oneport
             obj.data     = table2array(readtable(obj.data_str , "NumHeaderLines",hlines));
             obj.freq    = obj.data(:,1)*10^9;
             obj.Zin      = obj.data(:,2) + 1j*obj.data(:,3);
-            %obj.genSparameter();
-            
+            %obj.genSparameter();% NEED: function to convert Z -> S-param
+            end
         end
         
         

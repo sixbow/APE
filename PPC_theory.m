@@ -19,12 +19,14 @@ classdef PPC_theory
         function obj = PPC_theory(W,N,d,e_r)
             %PPC Construct an instance of this class
             %   Detailed explanation goes here
-            obj.W = W;
-            obj.N = N;
-            obj.d = d;
-            obj.e_r = e_r;
-            obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.N*obj.W))/(obj.d);
-        end 
+            if  nargin > 0
+                obj.W = W;
+                obj.N = N;
+                obj.d = d;
+                obj.e_r = e_r;
+                obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.N*obj.W))/(obj.d);
+            end   
+        end
         %End Constructors
         
         %General useful methods:
