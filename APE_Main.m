@@ -1,5 +1,5 @@
 clear all
-close all 
+
 %Data path
 addpath('.\Sonnet_data')
 filename_begin = 'PPCV0_0_3W';
@@ -34,6 +34,8 @@ CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
 %% Analyse data
 %Disp graph for the input impedance
+
+close all 
 freq = PPCs.get_freq();
 f = figure;
 hold on
@@ -47,7 +49,7 @@ for i=plot_iterator
     plot(freq,-imag(PPCs(i).get_Zin()));
     [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsSC.Zin()),'linearinterp',0);
     [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsPEC.Zin()),'linearinterp',0);
-    disp(PPCs(i).get_W());
+    %disp(PPCs(i).get_W());
 end
 
 
@@ -74,13 +76,16 @@ annotation('textarrow',[0.5 0.6310],[0.8137+an_of 0.8137+an_of],'String','Sonnet
 hold off
 % Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
+iterator_partial = 4:19;
 alpha_c_alu =  1 - deltaF;
 h2 = figure;
-plot(alpha_c_alu(4:19));
+
+sizes_W = arrayfun( @(x) x.get_W, PPCs  );
+plot(sizes_W(iterator_partial),alpha_c_alu(iterator_partial));
 title("Kinetic inductance fraction for different PPC Area's")
-xlabel('Configurations')
+xlabel('W [m]')
 ylabel('\alpha_{c,Alu}')
-ylim([0 0.2])
+%ylim([0 0.2])
 
 
 

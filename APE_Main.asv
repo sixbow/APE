@@ -60,18 +60,31 @@ line_width = 2;
 plot(freq,imag(CPWt.Zin(freq)));
 plot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin),'linewidth',line_width)
 plot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin),'linewidth',line_width)
-legend('PPC Theory','Sonnet','CPW Theory')
+%legend('PPC Theory','Sonnet','CPW Theory')
 ax = gca;
 xlabel('[Hz]')
 ylabel('Im(Z_{in}) [\Omega]')
 title('PPC and CPW input impedance')
 xlim([1E9 9E9]);
 ylim([0 75]);
+an_of = 0.055;
+annotation('textarrow',[0.5 0.7071],[0.7532+an_of 0.7532+an_of],'String','Theory')
+annotation('textarrow',[0.5 0.6310],[0.8137+an_of 0.8137+an_of],'String','Sonnet PPC')
+
 hold off
 % Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
+iterator_partial = 4:19;
 alpha_c_alu =  1 - deltaF;
-plot(alpha_c_alu())
+h2 = figure;
+
+sizes_W = arrayfun( @(x) x.get_W, PPCs  );
+plot(sizes_W(iterator_partial),alpha_c_alu(iterator_partial));
+title("Kinetic inductance fraction for different PPC Area's")
+xlabel('W [m]')
+ylabel('\alpha_{c,Alu}')
+%ylim([0 0.2])
+
 
 
 
