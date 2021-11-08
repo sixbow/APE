@@ -33,7 +33,7 @@ CPWt = CPW_theory_first_order(0.001,1.099E-9);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
-%% Analyse data
+%% Analyse data. Finding the intersects between CPW and PPC curves.
 %Disp graph for the input impedance
 
 close all 
@@ -41,7 +41,7 @@ freq = PPCs.get_freq();
 f = figure;
 hold on
 ax = gca;
-plot_iterator = iterator;
+plot_iterator = 3:19;
 for i=plot_iterator
     plot(freq,-imag(PPCt(i).Zin(freq)));
     plot(freq,-imag(PPCte(i).Zin(freq)),':');% Extended theoretical lines
@@ -52,8 +52,7 @@ for i=plot_iterator
     [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsPEC.Zin()),'linearinterp',0);
     %disp(PPCs(i).get_W());
 end
-
-
+%% Plotting..
 
 plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o')
 plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o')
@@ -75,7 +74,7 @@ annotation('textarrow',[0.5 0.7071],[0.7532+an_of 0.7532+an_of],'String','Theory
 annotation('textarrow',[0.5 0.6310],[0.8137+an_of 0.8137+an_of],'String','Sonnet PPC')
 
 hold off
-% Calculation of the deltaF_0
+%% Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
 iterator_partial = 4:19;
 alpha_c_alu =  1 - (deltaF.^2);
@@ -87,6 +86,25 @@ title("Kinetic inductance fraction for different PPC Area's")
 xlabel('W [m]')
 ylabel('\alpha_{c,Alu}')
 %ylim([0 0.2])
+
+
+%% Making fit for f(F_0)= W -> f_fit(F_0) = W
+f_fit_parameters = polyfit(x_intersect_sc(plot_iterator),sizes_W(plot_iterator),3);
+
+f_fit = polyval(f_fit_parameters, x_intersect_sc(plot_iterator));
+
+% What do i want to plot over here? plot(F_0,W)
+h3 = figure;
+hold on
+plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
+plot(x_intersect_sc(plot_iterator),f_fit);
+legend('Sonnet data f(F_{0}) = W','W = f_{fit}(F_{0}) = '+string(f_fit_parameters(1))+'x^{3}'+string(f_fit_parameters(2))+'x^{2}'+string(f_fit_parameters(3))+'x^{1}'+string(f_fit_parameters(1)));
+hold off 
+xlabel('Freq [Hz]');
+ylabel('Width PPC [m]');
+title('Relation between F_{0} and Width PPC');
+
+%% Making fit for g(Q_coupling)=Area_coupler -> g_fit(Q_c) = Area_c
 
 
 
