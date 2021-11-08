@@ -22,6 +22,7 @@ for i=iterator
     % PPC_sonnet_oneport(Width(m),N Length(m),d thickness(m),data_dir)
     PPCs(i) = PPC_sonnet_oneport(size_step_W*(i-1)+begin_size_W,50E-6,250E-9,total_filename,8);
 end
+PPCte = repmat(PPC_theory(),1,length(iterator));% convoluded way of preallocating an array of the objects
 for i=iterator
     %Extending the theoretical PPC lines to higher width values by creating these extended objects
     PPCte(i) = PPC_theory(size_step_W*(i-1)+100E-6,50E-6,250E-9,10);
@@ -77,7 +78,7 @@ hold off
 % Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
 iterator_partial = 4:19;
-alpha_c_alu =  1 - deltaF;
+alpha_c_alu =  1 - (deltaF.^2);
 h2 = figure;
 
 sizes_W = arrayfun( @(x) x.get_W, PPCs  );

@@ -20,6 +20,7 @@ classdef CPW_sonnet_oneport
         function obj = CPW_sonnet_oneport(S,W,M,data_str,hlines)
             %Constructor:  CPW_sonnet_oneport(S (width signal line[m]),W(width void [m]),M(Length CPW[m]),data_str(data string),hlines)
             % 
+            if nargin > 0 % Way to implement function overloading in MATLAB. Want to have empty constructor to allocate objects.
             obj.S        = S;
             obj.W        = W;
             obj.M        = M;
@@ -28,7 +29,7 @@ classdef CPW_sonnet_oneport
             obj.freq    = obj.data(:,1)*10^9;
             obj.Zin      = obj.data(:,2) + 1j*obj.data(:,3);
             %obj.genSparameter();
-            
+            end
         end
         
         

@@ -11,8 +11,10 @@ classdef CPW_theory_first_order
     methods
         function obj = CPW_theory_first_order(M,L)
             %Constructor CPW_theory_first_order(M(lenght CPW [m]),L(Inductance [Henry]))
+            if nargin > 0 % Way to implement function overloading in MATLAB. Want to have empty constructor to allocate objects.
             obj.M = M;
             obj.L = L;
+            end
         end
         
         function outputArg = Zin(obj,freq)
