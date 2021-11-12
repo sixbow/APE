@@ -90,10 +90,7 @@ ylabel('\alpha_{c,Alu}')
 
 %% Making fit for f(F_0)= W -> f_fit(F_0) = W
 f_fit_parameters = polyfit(x_intersect_sc(plot_iterator),sizes_W(plot_iterator),3);
-
 f_fit = polyval(f_fit_parameters, x_intersect_sc(plot_iterator));
-
-% What do i want to plot over here? plot(F_0,W)
 h3 = figure;
 hold on
 plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
@@ -105,7 +102,6 @@ ylabel('Width PPC [m]');
 title('Relation between F_{0} and Width PPC');
 
 %% Making fit for g(Q_coupling)=Area_coupler -> g_fit(Q_c) = Area_c
-
 
 
 

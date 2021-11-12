@@ -98,7 +98,7 @@ h3 = figure;
 hold on
 plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
 plot(x_intersect_sc(plot_iterator),f_fit);
-legend('Sonnet data f(F_{0}) = W','W = f_{fit}(F_{0}) = '+string(f_fit_parameters(1))+'x^{3}'+string(f_fit_parameters(2))+'x^{2}'+string(f_fit_parameter(3))+'x^{1}'+string(f_fit_parameter(1)));
+legend('Sonnet data f(F_{0}) = W','W = f_{fit}(F_{0}) = '+string(f_fit_parameters(1))+'x^{3}'+string(f_fit_parameters(2))+'x^{2}'+string(f_fit_parameters(3))+'x^{1}'+string(f_fit_parameters(1)));
 hold off 
 xlabel('Freq [Hz]');
 ylabel('Width PPC [m]');
@@ -106,6 +106,7 @@ title('Relation between F_{0} and Width PPC');
 
 %% Making fit for g(Q_coupling)=Area_coupler -> g_fit(Q_c) = Area_c
 
+% Make fi
 
 
 
