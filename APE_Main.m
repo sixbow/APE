@@ -1,4 +1,9 @@
-clear all
+clc
+close all 
+clear
+
+%clear all %clear classes % Increasingly strong statements about clearing
+%everything
 
 %Data path
 addpath('.\Sonnet_data')
@@ -34,44 +39,32 @@ CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
 %% Analyse data. Finding the intersects between CPW and PPC curves.
-%Disp graph for the input impedance
-
-close all 
+%Disp graph for the input impedance 
 freq = PPCs.get_freq();
 f = figure;
 hold on
-ax = gca;
 plot_iterator = 3:19;
 for i=plot_iterator
     plot(freq,-imag(PPCt(i).Zin(freq)));
     plot(freq,-imag(PPCte(i).Zin(freq)),':');% Extended theoretical lines
-    
-    %[x_intersect_t(i),y_intersect_t(i)] = find_intersect_2lines(PPCt(i).get_freq(),CPWt.get_freq(),imag(PPCs(i).Zin()),-imag(CPWs.Zin()),'linearinterp',1);
     plot(freq,-imag(PPCs(i).get_Zin()));
     [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsSC.Zin()),'linearinterp',0);
     [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsPEC.Zin()),'linearinterp',0);
-    %disp(PPCs(i).get_W());
 end
 %% Plotting..
-
 plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o')
 plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o')
-% Finding crossing points
-%[x_intersect,y_intersect] = find_intersect_2lines(PPCs(5).get_freq(),CPWsSC.get_freq(),imag(PPCs(5).Zin()),-imag(CPWsSC.Zin()),'linearinterp',1);
-line_width = 2;
 plot(freq,imag(CPWt.Zin(freq)));
-plot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin),'linewidth',line_width)
-plot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin),'linewidth',line_width)
+sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin))
+sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin))
 %legend('PPC Theory','Sonnet','CPW Theory')
-ax = gca;
 xlabel('[Hz]')
 ylabel('Im(Z_{in}) [\Omega]')
 title('PPC and CPW input impedance')
 xlim([1E9 9E9]);
 ylim([0 75]);
-an_of = 0.055;
-annotation('textarrow',[0.5 0.7071],[0.7532+an_of 0.7532+an_of],'String','Theory')
-annotation('textarrow',[0.5 0.6310],[0.8137+an_of 0.8137+an_of],'String','Sonnet PPC')
+normalizedtextarrow(gca(),[5e9 60],[6e9 60],'Fout:Theory')% This needs some shaving to get at the right place!
+normalizedtextarrow(gca(),[5e9 50],[6e9 50],'Fout:Sonnet PPC')
 
 hold off
 %% Calculation of the deltaF_0

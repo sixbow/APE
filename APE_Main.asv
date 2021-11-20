@@ -1,4 +1,9 @@
-clear all
+clc
+close all 
+clear
+
+%clear all %clear classes % Increasingly strong statements about clearing
+%everything
 
 %Data path
 addpath('.\Sonnet_data')
@@ -16,7 +21,7 @@ begin_name_W = 10;
 PPCt = repmat(PPC_theory(),1,length(iterator));% convoluded way of preallocating an array of the objects
 PPCs = repmat(PPC_sonnet_oneport(),1,length(iterator));% convoluded way of preallocating an array of the objects
 for i=iterator
-    %Constructor arg: PPC_theory(W (Width PPC(m)),N (Lenght PPC(m)),d (thickness dielectric(m)),e_r(number))
+    %Constructor arg: PPC_theory(W (Width PPC(m)),H (Lenght PPC(m)),d (thickness dielectric(m)),e_r(number))
     PPCt(i) = PPC_theory(size_step_W*(i-1)+begin_size_W,50E-6,250E-9,10);
     total_filename = filename_begin+string((i-1)*size_namestep_W+begin_name_W)+filename_end;
     % PPC_sonnet_oneport(Width(m),N Length(m),d thickness(m),data_dir)
@@ -34,42 +39,32 @@ CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
 %% Analyse data. Finding the intersects between CPW and PPC curves.
-%Disp graph for the input impedance
-
-close all 
+%Disp graph for the input impedance 
 freq = PPCs.get_freq();
 f = figure;
 hold on
-ax = gca;
 plot_iterator = 3:19;
 for i=plot_iterator
     plot(freq,-imag(PPCt(i).Zin(freq)));
     plot(freq,-imag(PPCte(i).Zin(freq)),':');% Extended theoretical lines
-    
-    %[x_intersect_t(i),y_intersect_t(i)] = find_intersect_2lines(PPCt(i).get_freq(),CPWt.get_freq(),imag(PPCs(i).Zin()),-imag(CPWs.Zin()),'linearinterp',1);
     plot(freq,-imag(PPCs(i).get_Zin()));
     [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsSC.Zin()),'linearinterp',0);
     [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsPEC.Zin()),'linearinterp',0);
-    %disp(PPCs(i).get_W());
 end
 %% Plotting..
-
 plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o')
 plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o')
-% Finding crossing points
-%[x_intersect,y_intersect] = find_intersect_2lines(PPCs(5).get_freq(),CPWsSC.get_freq(),imag(PPCs(5).Zin()),-imag(CPWsSC.Zin()),'linearinterp',1);
-line_width = 2;
 plot(freq,imag(CPWt.Zin(freq)));
-plot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin),'linewidth',line_width)
-plot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin),'linewidth',line_width)
+sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin))
+sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin))
 %legend('PPC Theory','Sonnet','CPW Theory')
-ax = gca;
 xlabel('[Hz]')
 ylabel('Im(Z_{in}) [\Omega]')
 title('PPC and CPW input impedance')
 xlim([1E9 9E9]);
 ylim([0 75]);
-an_of = 0.055;
+normalizedtextarrow(gca(),[5e9 60],[6e9 0.7532],'Theory')
+normalizedtextarrow(gca(),[5e9 50],[6e9 0.8137+an_of],'Theory')
 annotation('textarrow',[0.5 0.7071],[0.7532+an_of 0.7532+an_of],'String','Theory')
 annotation('textarrow',[0.5 0.6310],[0.8137+an_of 0.8137+an_of],'String','Sonnet PPC')
 
@@ -90,10 +85,7 @@ ylabel('\alpha_{c,Alu}')
 
 %% Making fit for f(F_0)= W -> f_fit(F_0) = W
 f_fit_parameters = polyfit(x_intersect_sc(plot_iterator),sizes_W(plot_iterator),3);
-
 f_fit = polyval(f_fit_parameters, x_intersect_sc(plot_iterator));
-
-% What do i want to plot over here? plot(F_0,W)
 h3 = figure;
 hold on
 plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
@@ -105,8 +97,6 @@ ylabel('Width PPC [m]');
 title('Relation between F_{0} and Width PPC');
 
 %% Making fit for g(Q_coupling)=Area_coupler -> g_fit(Q_c) = Area_c
-
-% Make fi
 
 
 
