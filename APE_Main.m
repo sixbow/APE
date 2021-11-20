@@ -16,7 +16,7 @@ begin_name_W = 10;
 PPCt = repmat(PPC_theory(),1,length(iterator));% convoluded way of preallocating an array of the objects
 PPCs = repmat(PPC_sonnet_oneport(),1,length(iterator));% convoluded way of preallocating an array of the objects
 for i=iterator
-    %Constructor arg: PPC_theory(W (Width PPC(m)),N (Lenght PPC(m)),d (thickness dielectric(m)),e_r(number))
+    %Constructor arg: PPC_theory(W (Width PPC(m)),H (Lenght PPC(m)),d (thickness dielectric(m)),e_r(number))
     PPCt(i) = PPC_theory(size_step_W*(i-1)+begin_size_W,50E-6,250E-9,10);
     total_filename = filename_begin+string((i-1)*size_namestep_W+begin_name_W)+filename_end;
     % PPC_sonnet_oneport(Width(m),N Length(m),d thickness(m),data_dir)
