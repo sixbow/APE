@@ -97,8 +97,14 @@ xlabel('Freq [Hz]');
 ylabel('Width PPC [m]');
 title('Relation between F_{0} and Width PPC');
 
-%% Making fit for g(Q_coupling)=Area_coupler -> g_fit(Q_c) = Area_c
-
-
-
-
+%% Comparison Old and new data and theory.
+PPCs_newdata = PPC_sonnet_oneport(50E-6,50E-6,250E-9,'PPCV0_9_9_compareA2500',9);
+figure;hold on; plot(freq,-imag(PPCs(9).get_Zin()))
+plot(freq,-imag(PPCs_newdata.get_Zin()));
+plot(freq,-imag(PPCt(9).get_Zin(freq)));
+legend('Old data Non-square','Square','Theory')
+title('Comparison between old data new data and theory for 50\mu m x 50\mu m = 2500um^{2}')
+xlabel('[Hz]')
+ylabel('Im(Z_{in}) [\Omega]')
+xlim([1E9 9E9]);
+ylim([0 75]);
