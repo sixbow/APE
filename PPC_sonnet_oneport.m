@@ -39,12 +39,21 @@ classdef PPC_sonnet_oneport
             %Getter for frequency
             outputArg = obj.freq;
         end
-        function outputArg = get_Zin(obj)
+        function Zin_for_index = get_Zin_for_index(obj,index)
+            Zin_for_index = obj.Zin(index);
+        end
+        function outputArg = get_Zin(obj,varargin)
             %Getter for complex input impedance.
+            if length(varargin) == 0 
             outputArg = obj.Zin;
+            else
+            index = varargin(1);
+            %disp(round(double(index{1,1})));
+            outputArg = obj.Zin(cell2mat(index));
+            end
         end
         function outputArg = get_W(obj)
-            %Getter for complex input impedance.
+            %Getter for width
             outputArg = obj.W;
         end
         %end Getters

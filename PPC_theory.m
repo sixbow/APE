@@ -30,7 +30,7 @@ classdef PPC_theory
         %End Constructors
         
         %General useful methods:
-        function outputArg = Zin(obj,freq)
+        function outputArg = get_Zin(obj,freq)
         %Zin calculates input impedance according to Zin=-j/(omega*C)
         outputArg = -1i.*(1./(2*pi*freq.*obj.C_PPC_theory));
         end

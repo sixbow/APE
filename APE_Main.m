@@ -43,29 +43,32 @@ CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 freq = PPCs.get_freq();
 f = figure;
 hold on
+h1 = sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin));
+h2 = sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin));
+
 plot_iterator = 3:19;
 for i=plot_iterator
-    plot(freq,-imag(PPCt(i).Zin(freq)));
-    plot(freq,-imag(PPCte(i).Zin(freq)),':');% Extended theoretical lines
-    plot(freq,-imag(PPCs(i).get_Zin()));
-    [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsSC.Zin()),'linearinterp',0);
-    [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).Zin()),imag(CPWsPEC.Zin()),'linearinterp',0);
+    ht(i) = plot(freq,-imag(PPCt(i).get_Zin(freq)));
+    hte(i) = plot(freq,-imag(PPCte(i).get_Zin(freq)),':');% Extended theoretical lines
+    hts(i) = plot(freq,-imag(PPCs(i).get_Zin()));
+    [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).get_Zin()),imag(CPWsSC.get_Zin()),'linearinterp',0);
+    [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).get_Zin()),imag(CPWsPEC.get_Zin()),'linearinterp',0);
+    %normalizedtextarrow(gca(),[8.9E9 -imag(PPCs(i).get_Zin(4000))],[(freq(4000)) -imag(PPCs(i).get_Zin(4000))],string(PPCs(i).get_W()*1E6*50))
 end
 %% Plotting..
-plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o')
-plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o')
-plot(freq,imag(CPWt.Zin(freq)));
-sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin))
-sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin))
-%legend('PPC Theory','Sonnet','CPW Theory')
+hisc = plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o');
+hipec = plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o');
+hcpwt = plot(freq,imag(CPWt.get_Zin(freq)),'linewidth',2);
+
+
 xlabel('[Hz]')
 ylabel('Im(Z_{in}) [\Omega]')
 title('PPC and CPW input impedance')
 xlim([1E9 9E9]);
 ylim([0 75]);
-normalizedtextarrow(gca(),[5e9 60],[6e9 60],'Fout:Theory')% This needs some shaving to get at the right place!
-normalizedtextarrow(gca(),[5e9 50],[6e9 50],'Fout:Sonnet PPC')
-
+normalizedtextarrow(gca(),[(freq(4000)-1E9) -imag(PPCt(5).get_Zin(freq(4000)))],[(freq(4000)) -imag(PPCt(5).get_Zin(freq(4000)))],'Theory')% This needs some shaving to get at the right place!
+normalizedtextarrow(gca(),[(freq(4250)-1E9) -imag(PPCs(5).get_Zin(4250))],[(freq(4250)) -imag(PPCs(5).get_Zin(4250))],'Sonnet PPC')
+legend([h1 h2 hcpwt],{'CPW Sc Al','CPW PEC Al','Shorted CPW Theory'});
 hold off
 %% Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
