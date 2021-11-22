@@ -14,3 +14,4 @@ In this framework it is possible to:
 Out we get the following data:
 - Resonant frequencies. $F_0$
 - Kinetic inductance fraction for various configurations.
+- Difference between square and rectangle for the PPC.
