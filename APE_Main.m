@@ -66,6 +66,7 @@ alpha_c_alu =  1 - (deltaF.^2);
 f2 = figure;
 
 sizes_W = arrayfun( @(x) x.get_W, PPCs  );
+sizes_H = arrayfun( @(x) x.get_H, PPCs );
 plot(sizes_W(iterator_partial),alpha_c_alu(iterator_partial));
 title("Kinetic inductance fraction for different PPC Area's")
 xlabel('W [m]')
@@ -74,21 +75,30 @@ ylabel('\alpha_{c,Alu}')
 
 
 %% Making fit for f(F_0)= W -> f_fit(F_0) = W
-f_fit_parameters = polyfit(x_intersect_sc(plot_iterator),sizes_W(plot_iterator),3);
-f_fit = polyval(f_fit_parameters, x_intersect_sc(plot_iterator));
-f4 = figure;
-hold on
-plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
-plot(x_intersect_sc(plot_iterator),f_fit);
-legend('Sonnet data f(F_{0}) = W','W = f_{fit}(F_{0}) = '+string(f_fit_parameters(1))+'x^{3}'+string(f_fit_parameters(2))+'x^{2}'+string(f_fit_parameters(3))+'x^{1}'+string(f_fit_parameters(1)));
-hold off 
-xlabel('Freq [Hz]');
-ylabel('Width PPC [m]');
-title('Relation between F_{0} and Width PPC');
+%f_fit_parameters = polyfit(x_intersect_sc(plot_iterator),sizes_W(plot_iterator),3);
+%f_fit = polyval(f_fit_parameters, x_intersect_sc(plot_iterator));
+%f4 = figure;
+%hold on
+%plot(x_intersect_sc(plot_iterator),sizes_W(plot_iterator));
+%plot(x_intersect_sc(plot_iterator),f_fit);
+%legend('Sonnet data f(F_{0}) = W','W = f_{fit}(F_{0}) = '+string(f_fit_parameters(1))+'x^{3}'+string(f_fit_parameters(2))+'x^{2}'+string(f_fit_parameters(3))+'x^{1}'+string(f_fit_parameters(1)));
+%hold off 
+%xlabel('Freq [Hz]');
+%ylabel('Width PPC [m]');
+%title('Relation between F_{0} and Width PPC');
+
+%% fitting F0=C*A^k by fitting in log log space.
+sizes_A = sizes_W(plot_iterator).*sizes_H(plot_iterator);
+[f,hpower, a , b] = powerlaw_fit(sizes_A,x_intersect_sc(plot_iterator));
+
+
+
+
+
 
 %% Comparison Old and new data and theory.
 PPCs_newdata = PPC_sonnet_oneport(50E-6,50E-6,250E-9,'PPCV0_9_9_compareA2500',9);
-f5 = figure;hold on; plot(freq,-imag(PPCs(9).get_Zin()))
+f6 = figure;hold on; plot(freq,-imag(PPCs(9).get_Zin()))
 %plot(freq,-imag(PPCs_newdata.get_Zin()));
 plot(freq,-imag(PPCt(9).get_Zin(freq)));
 %legend('Old data Non-square','Square','Theory')
