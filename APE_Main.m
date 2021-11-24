@@ -109,6 +109,8 @@ hold on
 plot(A_ppc,F0_out,'-.','linewidth',2)
 legend('Sonnet data',str_formula,'ABCD-theory');
 title('Sonnet data vs Power law vs ABCD-theory');
+grid on 
+grid minor
 hold off
 
 
