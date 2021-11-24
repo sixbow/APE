@@ -89,9 +89,27 @@ ylabel('\alpha_{c,Alu}')
 
 %% fitting F0=C*A^k by fitting in log log space.
 sizes_A = sizes_W(plot_iterator).*sizes_H(plot_iterator);
-[f,hpower, a , b] = powerlaw_fit(sizes_A,x_intersect_sc(plot_iterator));
 
-
+[f5,hpower, a , b , str_formula] = powerlaw_fit(sizes_A,x_intersect_sc(plot_iterator));
+figure(f5)
+conv_iter = 1:10;
+f_start =1E9;
+f = f_start;
+%F0_out =  zeros(length(iterator));
+F0 = zeros(length(conv_iter));
+for j=iterator
+    for i=conv_iter
+    F0(i) = F0_theory(f,0.001,A_ppc(j));
+    err = (F0(i)-f)./F0(i);
+    f = (F0(i)+f)/2;
+    end
+F0_out(j) = F0(length(conv_iter));
+end
+hold on
+plot(A_ppc,F0_out,'-.','linewidth',2)
+legend('Sonnet data',str_formula,'ABCD-theory');
+title('Sonnet data vs Power law vs ABCD-theory');
+hold off
 
 
 
