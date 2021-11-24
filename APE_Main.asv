@@ -4,6 +4,11 @@ clear
 
 %clear all %clear classes % Increasingly strong statements about clearing
 %everything
+% Parameters
+Z0 = 76.28;
+epsilon_eff = 10.6009;
+epsilon0 = 8.854187E-12;% [C/m]
+
 
 %Data path
 addpath('.\Sonnet_data')
@@ -26,7 +31,7 @@ for i=iterator
     PPCs(i) = PPC_sonnet_oneport(sqrt(A_ppc(i)),sqrt(A_ppc(i)),250E-9,total_filename,9);
 end
 % Constructs the CPW objects.
-CPWt = CPW_theory_first_order(0.001,1.099E-9);
+CPWt = CPW_theory(0.001,Z0,epsilon_eff);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
@@ -89,21 +94,29 @@ ylabel('\alpha_{c,Alu}')
 
 %% fitting F0=C*A^k by fitting in log log space.
 sizes_A = sizes_W(plot_iterator).*sizes_H(plot_iterator);
-[hpower, a , b] = lfit(sizes_A,x_intersect_sc(plot_iterator))
 
-f5 = figure;
+[f5,hpower, a , b , str_formula] = powerlaw_fit(sizes_A,x_intersect_sc(plot_iterator));
+figure(f5)
+conv_iter = 1:10;
+f_start =1E9;
+f = f_start;
+%F0_out =  zeros(length(iterator));
+F0 = zeros(length(conv_iter));
+for j=iterator
+    for i=conv_iter
+    F0(i) = F0_theory(f,0.001,A_ppc(j));
+    err = (F0(i)-f)./F0(i);
+    f = (F0(i)+f)/2;
+    end
+F0_out(j) = F0(length(conv_iter));
+end
 hold on
-plot(sizes_A,x_intersect_sc(plot_iterator))
-log_fit = polyfit(log(sizes_A), log(x_intersect_sc(plot_iterator)),1);
-%Fitting with f(x)= ax +b
-a = log_fit(1);
-b = log_fit(2);% Indices are numbered other way around because of n series polynominal
-plot(sizes_A, exp(b).*(sizes_A.^a),'--')
-legend('Sonnet Data','f(A) = e^{'+string(b)+'}\cdot A^{'+string(a)+'}')
-xlabel('area [m^{2}]')
-ylabel('F_{0} [Hz]')
-
-hold off 
+plot(A_ppc,F0_out,'-.','linewidth',2)
+legend('Sonnet data',str_formula,'ABCD-theory');
+title('Sonnet data vs Power law vs ABCD-theory');
+grid on 
+grid minor
+hold off
 
 
 

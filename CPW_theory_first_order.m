@@ -20,7 +20,7 @@ classdef CPW_theory_first_order
         function outputArg = get_Zin(obj,freq)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
-            outputArg = 1i*2.*pi.*freq.*obj.L;
+            outputArg = 1i*Z0*;
         end
     end
 end

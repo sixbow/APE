@@ -4,6 +4,11 @@ clear
 
 %clear all %clear classes % Increasingly strong statements about clearing
 %everything
+% Parameters
+Z0 = 76.28;
+epsilon_eff = 10.6009;
+epsilon0 = 8.854187E-12;% [C/m]
+
 
 %Data path
 addpath('.\Sonnet_data')
@@ -26,7 +31,7 @@ for i=iterator
     PPCs(i) = PPC_sonnet_oneport(sqrt(A_ppc(i)),sqrt(A_ppc(i)),250E-9,total_filename,9);
 end
 % Constructs the CPW objects.
-CPWt = CPW_theory_first_order(0.001,1.099E-9);
+CPWt = CPW_theory(0.001,Z0,epsilon_eff);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
 
