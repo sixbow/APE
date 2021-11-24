@@ -8,7 +8,7 @@ clear
 Z0 = 76.28;
 epsilon_eff = 10.6009;
 epsilon0 = 8.854187E-12;% [C/m]
-
+length_M = 0.001;%[m]
 
 %Data path
 addpath('.\Sonnet_data')
@@ -31,9 +31,9 @@ for i=iterator
     PPCs(i) = PPC_sonnet_oneport(sqrt(A_ppc(i)),sqrt(A_ppc(i)),250E-9,total_filename,9);
 end
 % Constructs the CPW objects.
-CPWt = CPW_theory(0.001,Z0,epsilon_eff);
-CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_SC,9);
-CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,0.001,filename_CPW_PEC,9);
+CPWt = CPW_theory(length_M,Z0,epsilon_eff);
+CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_SC,9);
+CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_PEC,9);
 
 %% Analyse data. Finding the intersects between CPW and PPC curves.
 %Disp graph for the input impedance 
@@ -59,9 +59,9 @@ xlabel('[Hz]')
 ylabel('Im(Z_{in}) [\Omega]')
 title('PPC and CPW input impedance')
 xlim([1E9 9E9]);
-ylim([0 50]);
-normalizedtextarrow(gca(),[(freq(4000)-1E9) -imag(PPCt(5).get_Zin(freq(4000)))],[(freq(4000)) -imag(PPCt(5).get_Zin(freq(4000)))],'Theory')% This needs some shaving to get at the right place!
-normalizedtextarrow(gca(),[(freq(4250)-1E9) -imag(PPCs(5).get_Zin(4250))],[(freq(4250)) -imag(PPCs(5).get_Zin(4250))],'Sonnet PPC')
+ylim([0 50]); 
+normalizedtextarrow(gca(),[(freq(3000)-1E9) -imag(PPCt(15).get_Zin(freq(3000)))],[(freq(3000)) -imag(PPCt(15).get_Zin(freq(3000)))],'Theory')% This needs some shaving to get at the right place!
+normalizedtextarrow(gca(),[(freq(3400)-1E9) -imag(PPCs(15).get_Zin(3400))],[(freq(3400)) -imag(PPCs(15).get_Zin(3400))],'Sonnet PPC')
 legend([hcpwsc hcpwpec hcpwt],{'CPW Sc Al','CPW PEC Al','Shorted CPW Theory'});
 hold off
 %% Calculation of the deltaF_0
