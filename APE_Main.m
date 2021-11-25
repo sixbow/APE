@@ -5,10 +5,13 @@ clear
 %clear all %clear classes % Increasingly strong statements about clearing
 %everything
 % Parameters
-Z0 = 76.28;
-epsilon_eff = 10.6009;
+Z0 = 79.605;%[Ohm] --> value from CPW simulation sonnet. varies only slightly as function of freq <0.1%
+Z0_PEC =65.3696 ;%%[Ohm] --> value from CPW simulation sonnet. varies only slightly as function of freq <3ppm
+epsilon_eff = 10.6008;%[-] --> value from CPW simulation sonnet. varies only slightly as function of freq <0.1%
+epsilon_eff_PEC = 7.1484;%[-] --> value from CPW simulation sonnet. varies only slightly as function of freq <0.1%
 epsilon0 = 8.854187E-12;% [C/m]
 length_M = 0.001;%[m]
+d = 250E-9;%[m]
 
 %Data path
 addpath('.\Sonnet_data')
@@ -32,6 +35,7 @@ for i=iterator
 end
 % Constructs the CPW objects.
 CPWt = CPW_theory(length_M,Z0,epsilon_eff);
+CPWtPEC = CPW_theory(length_M,Z0_PEC,epsilon_eff_PEC);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_PEC,9);
 
@@ -43,6 +47,7 @@ hold on
 hcpwsc = sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin));
 hcpwpec = sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin));
 hcpwt = plot(freq,imag(CPWt.get_Zin(freq)),'--','linewidth',2);
+hcpwt_PEC = plot(freq,imag(CPWtPEC.get_Zin(freq)),'--','linewidth',2);
 plot_iterator = iterator;
 for i=plot_iterator
     ht(i) = plot(freq,-imag(PPCt(i).get_Zin(freq)),'--');
@@ -62,7 +67,7 @@ xlim([1E9 9E9]);
 ylim([0 50]); 
 normalizedtextarrow(gca(),[(freq(3000)-1E9) -imag(PPCt(15).get_Zin(freq(3000)))],[(freq(3000)) -imag(PPCt(15).get_Zin(freq(3000)))],'Theory')% This needs some shaving to get at the right place!
 normalizedtextarrow(gca(),[(freq(3400)-1E9) -imag(PPCs(15).get_Zin(3400))],[(freq(3400)) -imag(PPCs(15).get_Zin(3400))],'Sonnet PPC')
-legend([hcpwsc hcpwpec hcpwt],{'CPW Sc Al','CPW PEC Al','Shorted CPW Theory'});
+legend([hcpwsc hcpwpec hcpwt hcpwt_PEC],{'CPW Sc Al','CPW PEC Al','SC: Shorted CPW Theory','PEC: Shorted CPW Theory'});
 hold off
 %% Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
@@ -104,7 +109,7 @@ f = f_start;
 F0 = zeros(length(conv_iter));
 for j=iterator
     for i=conv_iter
-    F0(i) = F0_theory(f,0.001,A_ppc(j));
+    F0(i) = F0_theory(f,0.001,A_ppc(j),Z0,epsilon_eff,d);%F0 = F0_theory(freq[Hz],lenght_CPW[m],AreaPPC[m^2],Z0[Ohm],epsilon_eff[-],d[m])
     err = (F0(i)-f)./F0(i);
     f = (F0(i)+f)/2;
     end
