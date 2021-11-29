@@ -80,7 +80,7 @@ hold off
 deltaF  = x_intersect_sc./x_intersect_pec;
 deltaF_t  = x_intersect_sc_t./x_intersect_pec_t;
 
-iterator_partial = 1:19;
+iterator_partial = iterator;
 alpha_c_alu =  1 - (deltaF.^2);
 alpha_c_alu_t =  1 - (deltaF_t.^2);
 f2 = figure;
@@ -126,19 +126,11 @@ grid on
 grid minor
 hold off
 
+%% Responsivity calculation.
+%[Alu.sigma1,Alu.sigma2,Alu.ds1dn,Alu.ds2dn]= Sigmas(2*pi*KID.Fres, Alu.N0, Alu.Delta, Alu.Teff);      %MB equations, vaklkid for T<<Tc, F<<Fgap
+%for i=iterator
+%[dthetadN(i),dRdN(i),dxdN(i),abssigma(i),Qi(i),Q(i),Beta(i)] = getresponsivity2(length_M,alpha_c_alu(i),20000,length_M*30e-9*2e-6,sigma1,sigma2,ds1dn,ds2dn,30e-9,Qim)
+%end
 
-
-
-%% Comparison Old and new data and theory.
-%PPCs_newdata = PPC_sonnet_oneport(50E-6,50E-6,250E-9,'PPCV0_9_9_compareA2500',9);
-%f6 = figure;hold on; plot(freq,-imag(PPCs(9).get_Zin()))
-%plot(freq,-imag(PPCs_newdata.get_Zin()));
-%plot(freq,-imag(PPCt(9).get_Zin(freq)));
-%legend('Old data Non-square','Square','Theory')
-%title('Comparison between old data new data and theory for 50\mu m x 50\mu m = 2500um^{2}')
-%xlabel('[Hz]')
-%ylabel('Im(Z_{in}) [\Omega]')
-%xlim([1E9 9E9]);
-%ylim([0 75]);
 
 toc

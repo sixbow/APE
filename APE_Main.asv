@@ -20,9 +20,7 @@ filename_end = '.csv';
 filename_CPW_SC = 'AlHybridV0_0_3_SC.csv';
 filename_CPW_PEC = 'AlHybridV0_0_3_PEC.csv';
 %% Loading Data and making objects.
-initializeobjects = false;
 
-if initializeobjects==true
 A_filename_umsquared = [12710,10056,8320,7094,6184,5480,4920,4464,4086,3766,3493,3257,3051,2869,2708,2564,2434,2317,2211,2114];
 A_ppc = A_filename_umsquared.*((1E-6)^2);
 
@@ -42,8 +40,7 @@ CPWtSC = CPW_theory(length_M,Z0,epsilon_eff);
 CPWtPEC = CPW_theory(length_M,Z0_PEC,epsilon_eff_PEC);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_PEC,9);
-else
-end
+
 %% Analyse data. Finding the intersects between CPW and PPC curves.
 %Disp graph for the input impedance 
 freq = PPCs.get_freq();
@@ -83,7 +80,7 @@ hold off
 deltaF  = x_intersect_sc./x_intersect_pec;
 deltaF_t  = x_intersect_sc_t./x_intersect_pec_t;
 
-iterator_partial = 1:19;
+iterator_partial = iterator;
 alpha_c_alu =  1 - (deltaF.^2);
 alpha_c_alu_t =  1 - (deltaF_t.^2);
 f2 = figure;
@@ -129,19 +126,10 @@ grid on
 grid minor
 hold off
 
+%% Responsivity calculation.
+for i=iterator
+[dthetadN,dRdN,dxdN,abssigma,Qi,Q,Beta] = getresponsivity2(length_M,alpha_c_alu(i),20000,length_M**2e-6,sigma1,sigma2,ds1dn,ds2dn,d,Qim)
+end
 
-
-
-%% Comparison Old and new data and theory.
-%PPCs_newdata = PPC_sonnet_oneport(50E-6,50E-6,250E-9,'PPCV0_9_9_compareA2500',9);
-%f6 = figure;hold on; plot(freq,-imag(PPCs(9).get_Zin()))
-%plot(freq,-imag(PPCs_newdata.get_Zin()));
-%plot(freq,-imag(PPCt(9).get_Zin(freq)));
-%legend('Old data Non-square','Square','Theory')
-%title('Comparison between old data new data and theory for 50\mu m x 50\mu m = 2500um^{2}')
-%xlabel('[Hz]')
-%ylabel('Im(Z_{in}) [\Omega]')
-%xlim([1E9 9E9]);
-%ylim([0 75]);
 
 toc
