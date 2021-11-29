@@ -22,6 +22,7 @@ filename_CPW_PEC = 'AlHybridV0_0_3_PEC.csv';
 %% Loading Data and making objects.
 A_filename_umsquared = [12710,10056,8320,7094,6184,5480,4920,4464,4086,3766,3493,3257,3051,2869,2708,2564,2434,2317,2211,2114];
 A_ppc = A_filename_umsquared.*((1E-6)^2);
+
 iterator = 1:length(A_ppc);
 %Constructs the PPC theory  and PPC sonnet objects.
 PPCt = repmat(PPC_theory(),1,length(iterator));% convoluded way of preallocating an array of the objects
