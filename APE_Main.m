@@ -35,7 +35,7 @@ for i=iterator
     PPCs(i) = PPC_sonnet_oneport(sqrt(A_ppc(i)),sqrt(A_ppc(i)),250E-9,total_filename,9);
 end
 % Constructs the CPW objects.
-CPWt = CPW_theory(length_M,Z0,epsilon_eff);
+CPWtSC = CPW_theory(length_M,Z0,epsilon_eff);
 CPWtPEC = CPW_theory(length_M,Z0_PEC,epsilon_eff_PEC);
 CPWsSC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_SC,9);
 CPWsPEC = CPW_sonnet_oneport(2E-6,2E-6,length_M,filename_CPW_PEC,9);
@@ -47,7 +47,7 @@ f1 = figure;
 hold on
 hcpwsc = sweetplot(CPWsSC.get_freq(),imag(CPWsSC.get_Zin));
 hcpwpec = sweetplot(CPWsPEC.get_freq(),imag(CPWsPEC.get_Zin));
-hcpwt = plot(freq,imag(CPWt.get_Zin(freq)),'--','linewidth',2);
+hcpwt = plot(freq,imag(CPWtSC.get_Zin(freq)),'--','linewidth',2);
 hcpwt_PEC = plot(freq,imag(CPWtPEC.get_Zin(freq)),'--','linewidth',2);
 plot_iterator = iterator;
 for i=plot_iterator
@@ -55,10 +55,15 @@ for i=plot_iterator
     hts(i) = plot(freq,-imag(PPCs(i).get_Zin()));
     [x_intersect_sc(i),y_intersect_sc(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsSC.get_freq(),-imag(PPCs(i).get_Zin()),imag(CPWsSC.get_Zin()),'linearinterp',0);
     [x_intersect_pec(i),y_intersect_pec(i)] = find_intersect_2lines(PPCs(i).get_freq(),CPWsPEC.get_freq(),-imag(PPCs(i).get_Zin()),imag(CPWsPEC.get_Zin()),'linearinterp',0);
+    [x_intersect_sc_t(i),y_intersect_sc_t(i)] = find_intersect_2lines(freq,freq,-imag(PPCt(i).get_Zin(freq)),imag(CPWtSC.get_Zin(freq)),'linearinterp',0);
+    [x_intersect_pec_t(i),y_intersect_pec_t(i)] = find_intersect_2lines(freq,freq,-imag(PPCt(i).get_Zin(freq)),imag(CPWtPEC.get_Zin(freq)),'linearinterp',0);
     %normalizedtextarrow(gca(),[8.9E9 -imag(PPCs(i).get_Zin(4000))],[(freq(4000)) -imag(PPCs(i).get_Zin(4000))],string(PPCs(i).get_W()*1E6*50))
 end
 hisc = plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o');
 hipec = plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o');
+hitsc = plot(x_intersect_sc_t(plot_iterator),y_intersect_sc_t(plot_iterator),'x');
+hitpec = plot(x_intersect_pec_t(plot_iterator),y_intersect_pec_t(plot_iterator),'x');
+
 
 
 xlabel('[Hz]')
@@ -72,16 +77,23 @@ legend([hcpwsc hcpwpec hcpwt hcpwt_PEC],{'CPW Sc Al','CPW PEC Al','SC: Shorted C
 hold off
 %% Calculation of the deltaF_0
 deltaF  = x_intersect_sc./x_intersect_pec;
-iterator_partial = 4:19;
-alpha_c_alu =  1 - (deltaF.^2);
-f2 = figure;
+deltaF_t  = x_intersect_sc_t./x_intersect_pec_t;
 
+iterator_partial = 1:19;
+alpha_c_alu =  1 - (deltaF.^2);
+alpha_c_alu_t =  1 - (deltaF_t.^2);
+f2 = figure;
+hold on 
 sizes_W = arrayfun( @(x) x.get_W, PPCs  );
 sizes_H = arrayfun( @(x) x.get_H, PPCs );
+sizes_W_t = arrayfun( @(x) x.get_W, PPCt  );
+sizes_H_t = arrayfun( @(x) x.get_H, PPCt );
 plot(sizes_W(iterator_partial),alpha_c_alu(iterator_partial));
+plot(sizes_W_t(iterator_partial),alpha_c_alu_t(iterator_partial),'--');
 title("Kinetic inductance fraction for different PPC Area's")
 xlabel('W [m]')
 ylabel('\alpha_{c,Alu}')
+hold off
 %ylim([0 0.2])
 
 

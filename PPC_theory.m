@@ -7,7 +7,7 @@ classdef PPC_theory
     properties
         d
         e_r
-        N
+        H
         W 
         C_PPC_theory
         e_0 = 8.854E-12;
@@ -16,15 +16,15 @@ classdef PPC_theory
         
     methods
         %Constructors:
-        function obj = PPC_theory(W,N,d,e_r)
+        function obj = PPC_theory(W,H,d,e_r)
             %PPC Construct an instance of this class
             %   Detailed explanation goes here
             if  nargin > 0
                 obj.W = W;
-                obj.N = N;
+                obj.H = H;
                 obj.d = d;
                 obj.e_r = e_r;
-                obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.N*obj.W))/(obj.d);
+                obj.C_PPC_theory = (obj.e_0*obj.e_r*(obj.H*obj.W))/(obj.d);
             end   
         end
         %End Constructors
@@ -36,7 +36,7 @@ classdef PPC_theory
         end
         function outputArg = get_A(obj)
             %get_C_PPC_theory() :  getter total surface area + small overlap PPC
-            outputArg = obj.A_narrow_section + obj.N*obj.W;
+            outputArg = obj.A_narrow_section + obj.H*obj.W;
         end 
         %End General useful methods
         
@@ -49,9 +49,9 @@ classdef PPC_theory
             %get_C_PPC_theory() :  getter for relative permitivity
             outputArg = obj.e_r;
         end 
-        function outputArg = get_N(obj)
+        function outputArg = get_H(obj)
             %get_C_PPC_theory() :  getter for Length PPC
-            outputArg = obj.N;
+            outputArg = obj.H;
         end 
         function outputArg = get_W(obj)
             %get_C_PPC_theory() :  getter for Width PPC
