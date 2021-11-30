@@ -24,6 +24,11 @@ filename_CPW_PEC = 'AlHybridV0_0_3_PEC.csv';
 A_filename_umsquared = [12710,10056,8320,7094,6184,5480,4920,4464,4086,3766,3493,3257,3051,2869,2708,2564,2434,2317,2211,2114];
 A_ppc = A_filename_umsquared.*((1E-6)^2);
 
+%5Target Toy model data validation
+F0_5Target = [5.86083 5.5316 5.33138 4.72955 4.01304 3.10839].*10^9;
+PPC_To_be_squared = [47.0213 50 52.0384 59.1016 70.1727 91.214].*10^(-6);
+A_ppc_5Target = PPC_To_be_squared.*PPC_To_be_squared;
+
 iterator = 1:length(A_ppc);
 %Constructs the PPC theory  and PPC sonnet objects.
 PPCt = repmat(PPC_theory(),1,length(iterator));% convoluded way of preallocating an array of the objects
@@ -59,6 +64,7 @@ for i=plot_iterator
     [x_intersect_sc_t(i),y_intersect_sc_t(i)] = find_intersect_2lines(freq,freq,-imag(PPCt(i).get_Zin(freq)),imag(CPWtSC.get_Zin(freq)),'linearinterp',0);
     [x_intersect_pec_t(i),y_intersect_pec_t(i)] = find_intersect_2lines(freq,freq,-imag(PPCt(i).get_Zin(freq)),imag(CPWtPEC.get_Zin(freq)),'linearinterp',0);
     %normalizedtextarrow(gca(),[8.9E9 -imag(PPCs(i).get_Zin(4000))],[(freq(4000)) -imag(PPCs(i).get_Zin(4000))],string(PPCs(i).get_W()*1E6*50))
+    set(gca,'FontSize',20);
 end
 hisc = plot(x_intersect_sc(plot_iterator),y_intersect_sc(plot_iterator),'o');
 hipec = plot(x_intersect_pec(plot_iterator),y_intersect_pec(plot_iterator),'o');
@@ -119,8 +125,10 @@ end
 hold on
 plot(sizes_A,x_intersect_sc_t,'--','linewidth',2);
 plot(A_ppc,F0_out,'-.','linewidth',2)
-
-legend('Sonnet data',str_formula,'Theory','Symbolic: ABCD-theory');
+h5Target = plot(A_ppc_5Target,F0_5Target,'+');
+h5Target.MarkerSize = 10;
+h5Target.LineWidth = 2;
+legend('Sonnet data',str_formula,'Theory','Symbolic: ABCD-theory','Full Sonnet');
 title('Sonnet data vs Power law vs ABCD-theory');
 grid on 
 grid minor
