@@ -88,21 +88,29 @@ normalizedtextarrow(gca(),[(freq(3400)-1E9) -imag(PPCs(15).get_Zin(3400))],[(fre
 legend([hcpwsc hcpwpec hcpwt hcpwt_PEC],{'CPW Sc Al','CPW PEC Al','SC: Shorted CPW Theory','PEC: Shorted CPW Theory'});
 hold off
 %% Calculation of the deltaF_0
-deltaF  = x_intersect_sc./x_intersect_pec;
-deltaF_t  = x_intersect_sc_t./x_intersect_pec_t;
-
 iterator_partial = iterator;
-alpha_c_alu =  1 - (deltaF.^2);
-alpha_c_alu_t =  1 - (deltaF_t.^2);
+alpha_c_alu =  kindfrac(x_intersect_sc,x_intersect_pec);
+alpha_c_alu_t =  kindfrac(x_intersect_sc_t,x_intersect_pec_t);
+%Now we add 1 point of data for the Toy_Model Origin2500 and Origin2500PEC
+% In order to get 1 data Point.
+alpha_c_alu_Origin2500 = kindfrac(5.5316,6.72285);
+
+
+
 f2 = figure;
 hold on 
 sizes_W = arrayfun( @(x) x.get_W, PPCs  );
 sizes_H = arrayfun( @(x) x.get_H, PPCs );
+sizes_A = sizes_W(iterator_partial).*sizes_H(iterator_partial);
 sizes_W_t = arrayfun( @(x) x.get_W, PPCt  );
 sizes_H_t = arrayfun( @(x) x.get_H, PPCt );
-plot(sizes_W(iterator_partial),alpha_c_alu(iterator_partial));
-plot(sizes_W_t(iterator_partial),alpha_c_alu_t(iterator_partial),'--');
+sizes_A_t = sizes_W_t(iterator_partial).*sizes_H_t(iterator_partial);
+plot(sizes_A,alpha_c_alu(iterator_partial),'LineWidth',2);
+plot(sizes_A_t,alpha_c_alu_t(iterator_partial),'--','LineWidth',2);
+plot(2500E-12,alpha_c_alu_Origin2500,'+','LineWidth',2);
 title("Kinetic inductance fraction for different PPC Area's")
+ylim([0.3 0.35])
+legend('Sonnet data','2Part model','Full Sonnet')
 xlabel('W [m]')
 ylabel('\alpha_{c,Alu}')
 hold off
