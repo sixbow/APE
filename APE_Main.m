@@ -28,6 +28,11 @@ A_ppc = A_filename_umsquared.*((1E-6)^2);
 F0_5Target = [5.86083 5.5316 5.33138 4.72955 4.01304 3.10839].*10^9;
 PPC_To_be_squared = [47.0213 50 52.0384 59.1016 70.1727 91.214].*10^(-6);
 A_ppc_5Target = PPC_To_be_squared.*PPC_To_be_squared;
+% Jochem Code data
+F0_Jochem = [2310621857.66901,2594151197.17164,2848091619.57189,3080193995.21574,3294570175.75902,3495048293.57827,3683595761.38946,3861932630.02850,4031177778.48288,4193284041.57368,4348211285.19556,4496947156.08466,4640060715.25595,4778557898.03422,4911996912.86868,5041319369.84867,5167282193.70940,5289103153.16627,5407241595.85572,5522580077.27439];
+A_ppc;
+
+
 
 iterator = 1:length(A_ppc);
 %Constructs the PPC theory  and PPC sonnet objects.
@@ -128,7 +133,10 @@ plot(A_ppc,F0_out,'-.','linewidth',2)
 h5Target = plot(A_ppc_5Target,F0_5Target,'+');
 h5Target.MarkerSize = 10;
 h5Target.LineWidth = 2;
-legend('Sonnet data',str_formula,'Theory','Symbolic: ABCD-theory','Full Sonnet');
+hJochem = plot(A_ppc,F0_Jochem);
+hJochem.MarkerSize = 10;
+hJochem.LineWidth = 2;
+legend('Sonnet data',str_formula,'Theory','Symbolic: ABCD-theory','Full Sonnet','Jochem code');
 title('Sonnet data vs Power law vs ABCD-theory');
 grid on 
 grid minor
