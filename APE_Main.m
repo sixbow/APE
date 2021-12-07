@@ -156,5 +156,36 @@ hold off
 %[dthetadN(i),dRdN(i),dxdN(i),abssigma(i),Qi(i),Q(i),Beta(i)] = getresponsivity2(length_M,alpha_c_alu(i),20000,length_M*30e-9*2e-6,sigma1,sigma2,ds1dn,ds2dn,30e-9,Qim)
 %end
 
+%% g(A_coupler) =  Q_coupler
+UNIT_Coupler_sonnet_class();
+%Making objects for the Coupler data
+filename_coupler = 'Coupler_FullDielectricV0_5_0Oeff';
+iterator_coupler = 1:20;
+for i=iterator_coupler
+    Couplers(i) = Coupler_sonnet(4E-6,i*10^(-6),250E-9,filename_coupler+string(i)+filename_end,15);
+end
+fcoupler = figure;
+hold on 
+X_Area = [];
+Y_Qc = [];
+index_freq = 4000;
+for i=iterator_coupler
+   X_Area = [ X_Area, Couplers(i).Oeff]
+   Y_Qc = [Y_Qc Couplers(i).get_Qc(index_freq)] 
+end
+hcoupler(i) = plot(X_Area,Y_Qc,'LineWidth',3);
+xlabel('Oeff [m]')
+ylabel('Qc [-]')
+title('Qc vs Oeff for freq='+string(Couplers(1).get_freq(index_freq)))
+
+
+
+
+% Number of header lines 15
+
+
+
+
+
 
 toc
