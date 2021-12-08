@@ -166,11 +166,24 @@ for i=iterator_coupler
 end
 % Number of header lines 15
 %Plotting the coupler data for 1 freq.
-freq_index = 4000;
+figure
+ax = axes('XScale', 'log', 'YScale', 'log');
+Coupler_Freq_steps = 10;
+ax.ColorOrder = hsv(Coupler_Freq_steps);
+hold on 
+
+for i=1:Coupler_Freq_steps
+freq_index = floor(subsref(linspace(1,8001,Coupler_Freq_steps),struct('type','()','subs',{{i}})));%Matlab ugly way of doing inline indexing linspace is input and {} is the index
 Area_Couplers = arrayfun( @(x) x.get_Area, Couplers  );
 Qc_Couplers = arrayfun( @(x) x.get_Qc(freq_index), Couplers );
 plot(Area_Couplers,Qc_Couplers,'LineWidth',2);
-xlabel('A_{overlap_coupler} [m^{2}]')
+LegendData{i}='f='+string(Couplers(1).get_freq(freq_index)/10^9)+'GHz' ;
+end
+hold off
+grid on
+xlabel('A_{overlap coupler} [m^{2}]')
 ylabel('Qc [-]')
-title('Qc vs Oeff for freq='+string(Couplers(1).get_freq(freq_index)))
+legend(LegendData)
+title('Qc vs Area coupler for various frequencies')
+
 toc
