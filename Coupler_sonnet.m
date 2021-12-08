@@ -42,11 +42,7 @@ classdef Coupler_sonnet
             obj.S31      = obj.data(:,14) + 1j*obj.data(:,15);
             obj.S32      = obj.data(:,16) + 1j*obj.data(:,17);
             obj.S33      = obj.data(:,18) + 1j*obj.data(:,19);
-<<<<<<< HEAD
             obj.Qc = pi./(2*(abs(obj.S13).^2));
-=======
-            obj.Qc = pi./(2*abs(obj.S13).^2);
->>>>>>> 2cfad699ba91af772d0b8bab140aa356632196aa
             obj.Area = Wcoupler*Oeff;
             
             
@@ -80,7 +76,6 @@ classdef Coupler_sonnet
         end
         function outputArg = get_Area(obj,varargin)
             %Getter for area.
-<<<<<<< HEAD
             if length(varargin) == 0 
             outputArg = obj.Area;
             else
@@ -97,10 +92,6 @@ classdef Coupler_sonnet
             index = varargin(1);
             disp('Only has one value! You should not give an argument');
             end    
-=======
-            outputArg = obj.Area;
-            
->>>>>>> 2cfad699ba91af772d0b8bab140aa356632196aa
         end
     end
 end

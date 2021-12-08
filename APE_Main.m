@@ -164,13 +164,13 @@ iterator_coupler = 1:20;
 for i=iterator_coupler
     Couplers(i) = Coupler_sonnet(4E-6,(i-1)*10^(-6),250E-9,filename_coupler+string(i)+filename_end,15);
 end
-
-
 % Number of header lines 15
-
-
-
-
-
-
+%Plotting the coupler data for 1 freq.
+freq_index = 4000;
+Area_Couplers = arrayfun( @(x) x.get_Area, Couplers  );
+Qc_Couplers = arrayfun( @(x) x.get_Qc(freq_index), Couplers );
+plot(Area_Couplers,Qc_Couplers,'LineWidth',2);
+xlabel('A_{overlap_coupler} [m^{2}]')
+ylabel('Qc [-]')
+title('Qc vs Oeff for freq='+string(Couplers(1).get_freq(freq_index)))
 toc
