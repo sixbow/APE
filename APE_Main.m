@@ -111,7 +111,7 @@ plot(2500E-12,alpha_c_alu_Origin2500,'+','LineWidth',2);
 title("Kinetic inductance fraction for different PPC Area's")
 ylim([0.3 0.35])
 legend('Sonnet data','2Part model','Full Sonnet')
-xlabel('W [m]')
+xlabel('Area [m^{2}]')
 ylabel('\alpha_{c,Alu}')
 hold off
 %ylim([0 0.2])
