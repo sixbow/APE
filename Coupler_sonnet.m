@@ -22,7 +22,7 @@ classdef Coupler_sonnet
     end
     
     methods
-        function obj = Coupler_sonnet(Wcoupler,Oeff,d,data_str,hlines)
+        function obj = Coupler_sonnet(Wcoupler,Oeff,d,LengthCorrection,data_str,hlines)
             %Coupler_sonnet(Width,Oeff,d,data_str,hlines) Construct an instance of this class
             % You need to give the Width[m] , the effective overlap with the
             % readout line denoted by Oeff[m] , thickness of the dielectric
@@ -42,7 +42,7 @@ classdef Coupler_sonnet
             obj.S31      = obj.data(:,14) + 1j*obj.data(:,15);
             obj.S32      = obj.data(:,16) + 1j*obj.data(:,17);
             obj.S33      = obj.data(:,18) + 1j*obj.data(:,19);
-            obj.Qc = pi./(2*(abs(obj.S13).^2));
+            obj.Qc = (LengthCorrection.*pi)./(2*(abs(obj.S13).^2));%Correction due to the discussion with alejandro.
             obj.Area = Wcoupler*Oeff;
             
             

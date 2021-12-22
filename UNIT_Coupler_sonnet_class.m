@@ -7,7 +7,7 @@ disp('------------------------------')
 testcounter = 0;
 testpassedcounter = 0;
 disp('Using the constructor to create the object')
-test = Coupler_sonnet(4E-6,0,250E-9,'Coupler_FullDielectricV0_5_0Oeff0.csv',15);
+test = Coupler_sonnet(4E-6,0,250E-9,2.554,'Coupler_FullDielectricV0_5_0Oeff0.csv',15);
 disp('Passed')
 testcounter = testcounter + 1;
 testpassedcounter = testpassedcounter +1;

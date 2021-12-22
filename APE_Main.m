@@ -161,8 +161,10 @@ UNIT_Coupler_sonnet_class();
 %Making objects for the Coupler data
 filename_coupler = 'Coupler_FullDielectricV0_5_0Oeff';
 iterator_coupler = 1:20;
+%CAUTION: i have added the x=2.554 correction factor that has been
+%calcuated from the discussion on mail with Alejandro Akira.
 for i=iterator_coupler
-    Couplers(i) = Coupler_sonnet(4E-6,(i-1)*10^(-6),250E-9,filename_coupler+string(i)+filename_end,15);
+    Couplers(i) = Coupler_sonnet(4E-6,(i-1)*10^(-6),250E-9,2.55,filename_coupler+string(i)+filename_end,15);
 end
 % Number of header lines 15
 %Plotting the coupler data for 1 freq.
@@ -171,6 +173,11 @@ ax = axes('XScale', 'log', 'YScale', 'log');
 Coupler_Freq_steps = 10;
 ax.ColorOrder = hsv(Coupler_Freq_steps);
 hold on 
+%Data from lorenzian fit 
+Lor_Area = [3.2e-11 4e-11 4.8e-11 5.5999e-11];
+Lor_Qc = [136370.7 12717.8 5386.6 2229.08];
+
+
 
 for i=1:Coupler_Freq_steps
 freq_index = floor(subsref(linspace(1,8001,Coupler_Freq_steps),struct('type','()','subs',{{i}})));%Matlab ugly way of doing inline indexing linspace is input and {} is the index
@@ -179,11 +186,23 @@ Qc_Couplers = arrayfun( @(x) x.get_Qc(freq_index), Couplers );
 plot(Area_Couplers,Qc_Couplers,'LineWidth',2);
 LegendData{i}='f='+string(Couplers(1).get_freq(freq_index)/10^9)+'GHz' ;
 end
+plot(Lor_Area, Lor_Qc,'+','Linewidth',2,'Color','c')
 hold off
 grid on
 xlabel('A_{overlap coupler} [m^{2}]')
 ylabel('Qc [-]')
 legend(LegendData)
 title('Qc vs Area coupler for various frequencies')
+
+%% Make parameters for 16 CKIDs
+
+% Linspace between 4-8 GHz of 16 CKIDs
+addpath('.\Exportdata')
+F0_16CKID = linspace(4,8,16);
+
+Area_16CKID = f_inv_fit(a,b,F0_16CKID,'native')';
+
+CKID_DataPackage= [F0_16CKID' Area_16CKID ];
+writematrix(CKID_DataPackage,'Exportdata/Datapackage.csv','Delimiter','tab')
 
 toc
