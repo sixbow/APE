@@ -199,10 +199,35 @@ title('Qc vs Area coupler for various frequencies')
 % Linspace between 4-8 GHz of 16 CKIDs
 addpath('.\Exportdata')
 F0_16CKID = linspace(4,8,16);
-
+%Use struct to refactor code over here.
 Area_16CKID = f_inv_fit(a,b,F0_16CKID,'native')';
 
 CKID_DataPackage= [F0_16CKID' Area_16CKID ];
 writematrix(CKID_DataPackage,'Exportdata/Datapackage.csv','Delimiter','tab')
+
+
+
+%% Calc. parameters responsivity. Get responsivity.
+% In here i want to calculate the parameters to calculate the responsivity.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 toc
