@@ -1,3 +1,4 @@
+%% Setup
 %clc
 close all 
 %clear
@@ -153,13 +154,8 @@ grid on
 grid minor
 hold off
 
-%% Responsivity calculation.
-%[Alu.sigma1,Alu.sigma2,Alu.ds1dn,Alu.ds2dn]= Sigmas(2*pi*KID.Fres, Alu.N0, Alu.Delta, Alu.Teff);      %MB equations, vaklkid for T<<Tc, F<<Fgap
-%for i=iterator
-%[dthetadN(i),dRdN(i),dxdN(i),abssigma(i),Qi(i),Q(i),Beta(i)] = getresponsivity2(length_M,alpha_c_alu(i),20000,length_M*30e-9*2e-6,sigma1,sigma2,ds1dn,ds2dn,30e-9,Qim)
-%end
-
-%% g(A_coupler) =  Q_coupler
+%% Relation between Qc and A_coupler 
+%g(A_coupler) =  Q_coupler
 UNIT_Coupler_sonnet_class();
 %Making objects for the Coupler data
 filename_coupler = 'Coupler_FullDielectricV0_5_0Oeff';
@@ -212,10 +208,29 @@ writematrix(CKID_DataPackage,'Exportdata/Datapackage.csv','Delimiter','tab')
 
 %% Calc. parameters responsivity. Get responsivity.
 % In here i want to calculate the parameters to calculate the responsivity.
-T = 0.120% [K] 
+
+%Parameters necessary for getNqp_Tbath function.
+Alu.Teff = 0.120; % [K] 
+Alu.Tc          = 1.125;    % [K] (Source: Jochem code)
+Alu.eta_pb      = 0.4;      % (Source: Jochem code)pair breaking eficiency 0.4 for medium thin aluminium on Si, 0.56 for thick Alu
+Alu.tau0        = 438e-9;   % (Source: Jochem code)Kaplan single particle tau_0. 438e-9 is the Kaplan value. Can change and our old papers have a factor wrong here
+Alu.length = 0.001; %[m]
+Alu.width = 2E-6; %[m]
+Alu.height = 30E-9; %[m]
+Alu.V = Alu.lenght*Alu.width*Alu.height ; %[m^3] 
+KID.Tbath = 0.120 ; % [K]
+
+% Start-----Compare Mazin 
+
+% End ------Compare Mazin
 sigma_n_Al = 3.77E7; % [Siemens/m] Source: https://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity
 beta = calcbeta(5.44E9,epsilon_eff,phyconst.c);
+[Alu.nqp, Alu.tauqp, Alu.Nqp, KID.NEPGR] = getNqp_Tbath(Alu.Tc, Alu.eta_pb, Alu.V, KID.Tbath, Alu.tau0);% Jochem
 
+
+[Alu.sigma1,Alu.sigma2,Alu.ds1dn,Alu.ds2dn]                             = Sigmas(2*pi*KID.Fres, Alu.N0, Alu.Delta, Alu.Teff);      %MB equations, vaklkid for T<<Tc, F<<Fgap
+[KID.dthetadN,KID.dAdN,KID.dxdN,Alu.abssigma,KID.Qi,KID.Q,Alu.Beta]     = getresponsivity2(Alu.l_elec,KID.alphatot,KID.Qc,Alu.V,Alu.sigma1,Alu.sigma2,Alu.ds1dn,Alu.ds2dn,Alu.t,Qim);
+                                                                          %[dthetadN,dRdN,dxdN,abssigma,Qi,Q,Beta] = getresponsivity2(length,alphak,Qc,V,sigma1,sigma2,ds1dn,ds2dn,d,Qim)
 sigma = 0;%To be filled in....
 
 
