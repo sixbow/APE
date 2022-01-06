@@ -4,6 +4,9 @@ close all
 tic
 %clear all %clear classes % Increasingly strong statements about clearing
 %everything
+%-Useful Physics constants
+phyconst.c = 299792458 ;% [m/s] - Speed of light! 
+
 % Parameters
 Z0 = 79.605;%[Ohm] --> value from CPW simulation sonnet. varies only slightly as function of freq <0.1%
 Z0_PEC =65.3696 ;%%[Ohm] --> value from CPW simulation sonnet. varies only slightly as function of freq <3ppm
@@ -209,9 +212,11 @@ writematrix(CKID_DataPackage,'Exportdata/Datapackage.csv','Delimiter','tab')
 
 %% Calc. parameters responsivity. Get responsivity.
 % In here i want to calculate the parameters to calculate the responsivity.
+T = 0.120% [K] 
+sigma_n_Al = 3.77E7; % [Siemens/m] Source: https://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity
+beta = calcbeta(5.44E9,epsilon_eff,phyconst.c);
 
-
-
+sigma = 0;%To be filled in....
 
 
 
