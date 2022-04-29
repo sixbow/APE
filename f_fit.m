@@ -13,7 +13,7 @@ end
 if strcmp(baseunits,'base')
     F0 = exp(b)*(Area^(a));
 elseif strcmp(baseunits,'native')
-    F0 = 10^(log10(exp(b))-12*a-9 )*Area^a;
+    F0 = 10.^(log10(exp(b))-12.*a-9 ).*Area.^a;
 else
 msg = "Non allowed baseunits. baseunits chooser must be 'base'(m|Hz) or 'native'(um|GHz) !";
 error(msg)
