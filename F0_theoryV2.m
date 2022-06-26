@@ -10,5 +10,7 @@ Cppc = PPCAreatocap( A, d , epsilon_r_dielectic,'native')
 theta = 2*pi*((sqrt(epsilon_eff)*freq)/c)*l
 F0 = ((1)/(2*pi*Cppc*Z0*tan(theta)));
 
+
+%The mistake here is that theta itself depens on freq=F0
 end
 
