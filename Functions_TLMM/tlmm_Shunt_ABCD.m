@@ -1,4 +1,4 @@
-function matrix = tlmm_Shunt_ABCD(Z)
+function matrix = tlmm_Shunt_ABCD_Z(Z)
 %tlmm_Shunt_ABCD(freq,Z) calculates the ABCD matrix for a shunt
 %impedance
 
